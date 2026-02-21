@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Briefcase, Plus, Package, Edit2, Trash2, Users, Calendar, AlertCircle } from 'lucide-react';
 
-const API_URL = 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function WorkspaceTypes() {
   const [workspaceTypes, setWorkspaceTypes] = useState([]);

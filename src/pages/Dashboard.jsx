@@ -13,7 +13,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
 
-  const API_URL = "http://localhost:3000"
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetchStats()

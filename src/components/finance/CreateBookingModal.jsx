@@ -3,6 +3,9 @@
 import { useState } from "react"
 import { X, Loader2 } from "lucide-react"
 
+
+const API_URL = import.meta.env.VITE_API_URL;
+
 export default function CreateBookingModal({ isOpen, onClose, onSuccess }) {
   const [form, setForm] = useState({
     customerName: "",
@@ -30,7 +33,7 @@ export default function CreateBookingModal({ isOpen, onClose, onSuccess }) {
     try {
       const token = localStorage.getItem("token")
 
-      const res = await fetch("http://localhost:3000/api/bookings", {
+      const res = await fetch(`${API_URL}/api/bookings`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

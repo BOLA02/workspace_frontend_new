@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Calendar, User, DollarSign, Download, Filter, Plus, Search, TrendingUp, TrendingDown, FileText, Trash2, Phone, Clock } from 'lucide-react';
 
-const API_URL = 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function BookingsAndExpenses() {
   const [activeTab, setActiveTab] = useState('bookings');

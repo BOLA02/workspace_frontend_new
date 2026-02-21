@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [error, setError] = useState("")
 
   // Change this to your API URL
-  const API_URL = "http://localhost:3000"
+ const API_URL = import.meta.env.VITE_API_URL;
 
   const handleLogin = async (e) => {
     e.preventDefault()
