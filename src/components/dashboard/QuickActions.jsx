@@ -1,7 +1,7 @@
 export default function QuickActions() {
   return (
-    <div className="mt-8 bg-slate-800 border border-slate-700 rounded-lg p-6">
-      <h2 className="text-xl font-semibold text-slate-100 mb-4">
+    <div className="mt-8 bg-white-800 shadow rounded-lg p-6">
+      <h2 className="text-xl font-semibold text-gray-900 mb-4">
         Quick Actions
       </h2>
       <div className="flex flex-wrap gap-3">

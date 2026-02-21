@@ -47,16 +47,16 @@ export default function DashboardPage() {
   if (error) return <ErrorScreen error={error} onRetry={fetchStats} />
 
   return (
-    <div className="p-8 bg-slate-900 min-h-screen">
-      <DashboardHeader />
-      <StatsGrid stats={stats} />
+  <div className="p-8 bg-gray-50 min-h-screen">
+    <DashboardHeader />
+    <StatsGrid stats={stats} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <WorkspaceTypeTable data={stats?.byWorkspaceType} />
-        <PaymentMethodTable data={stats?.byPaymentMethod} />
-      </div>
-
-      <QuickActions />
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <WorkspaceTypeTable data={stats?.byWorkspaceType} />
+      <PaymentMethodTable data={stats?.byPaymentMethod} />
     </div>
-  )
+
+    <QuickActions />
+  </div>
+)
 }

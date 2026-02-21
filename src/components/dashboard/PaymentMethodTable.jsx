@@ -2,9 +2,9 @@ import { COLORS } from "../../constants/colors"
 
 export default function PaymentMethodTable({ data }) {
   return (
-    <div className="bg-slate-800 border border-slate-700 rounded-lg">
-      <div className="p-6 border-b border-slate-700">
-        <h2 className="text-xl font-semibold text-slate-100">
+    <div className="bg-white  rounded-lg shadow">
+      <div className="p-6 ">
+        <h2 className="text-xl font-semibold text-gray-900">
           Bookings by Payment Method
         </h2>
       </div>
@@ -19,11 +19,11 @@ export default function PaymentMethodTable({ data }) {
                     className="w-4 h-4 rounded"
                     style={{ backgroundColor: COLORS[index % COLORS.length] }}
                   />
-                  <span className="text-slate-300">{pm.paymentMethod}</span>
+                  <span className="text-gray-900">{pm.paymentMethod}</span>
                 </div>
                 <div className="text-right">
-                  <div className="text-slate-100 font-semibold">{pm._count}</div>
-                  <div className="text-sm text-slate-400">
+                  <div className="text-gray-900 font-semibold">{pm._count}</div>
+                  <div className="text-sm text-gray-900">
                     ₦{(pm._sum?.amountPaid || 0).toLocaleString("en-NG")}
                   </div>
                 </div>

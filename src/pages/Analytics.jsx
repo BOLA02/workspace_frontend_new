@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { TrendingUp, DollarSign, Calendar, Users } from 'lucide-react';
+import { TrendingUp,  Calendar, Users, Banknote } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -75,11 +75,11 @@ export default function Analytics() {
 
         <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-lg shadow text-white">
           <div className="flex items-center justify-between mb-2">
-            <DollarSign className="w-8 h-8 opacity-80" />
+            <Banknote className="w-8 h-8 opacity-80" />
             <TrendingUp className="w-5 h-5 opacity-80" />
           </div>
           <p className="text-sm opacity-90">Total Revenue</p>
-          <p className="text-3xl font-bold">${stats.totalRevenue?.toFixed(2) || '0.00'}</p>
+          <p className="text-3xl font-bold">₦{stats.totalRevenue?.toFixed(2) || '0.00'}</p>
         </div>
 
         <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-lg shadow text-white">
@@ -89,7 +89,7 @@ export default function Analytics() {
           </div>
           <p className="text-sm opacity-90">Avg Booking Value</p>
           <p className="text-3xl font-bold">
-            ${stats.totalBookings > 0 ? (stats.totalRevenue / stats.totalBookings).toFixed(2) : '0.00'}
+            ₦{stats.totalBookings > 0 ? (stats.totalRevenue / stats.totalBookings).toFixed(2) : '0.00'}
           </p>
         </div>
       </div>
@@ -134,7 +134,7 @@ export default function Analytics() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="count" fill="#10B981" name="Count" />
+               <Bar dataKey="revenue" fill="#3B82F6" name="Revenue (₦)" />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -154,7 +154,7 @@ export default function Analytics() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="revenue" fill="#3B82F6" name="Revenue ($)" />
+                <Bar dataKey="revenue" fill="#3B82F6" name="Revenue (₦)" />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -178,7 +178,7 @@ export default function Analytics() {
                     <span className="font-medium text-gray-900">{item.name}</span>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-gray-900">${item.revenue.toFixed(2)}</p>
+                    <p className="font-bold text-gray-900">₦{item.revenue.toFixed(2)}</p>
                     <p className="text-xs text-gray-500">{item.count} bookings</p>
                   </div>
                 </div>
@@ -217,9 +217,9 @@ export default function Analytics() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-gray-900">{item.count}</td>
-                  <td className="px-6 py-4 text-gray-900">${item.revenue.toFixed(2)}</td>
+                  <td className="px-6 py-4 text-gray-900">₦{item.revenue.toFixed(2)}</td>
                   <td className="px-6 py-4 text-gray-900">
-                    ${(item.revenue / item.count).toFixed(2)}
+                    ₦{(item.revenue / item.count).toFixed(2)}
                   </td>
                 </tr>
               ))}

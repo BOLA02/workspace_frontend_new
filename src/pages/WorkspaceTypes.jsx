@@ -298,66 +298,78 @@ export default function WorkspaceTypes() {
         </div>
       )}
 
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4">
-              {editMode ? 'Edit Workspace Type' : 'Add Workspace Type'}
-            </h2>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Workspace Type Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="e.g., Hot Desk, Private Office"
-                />
-              </div>
+     {showModal && (
+  <div className="fixed inset-0 z-50">
+    {/* Blur overlay */}
+    <div className="absolute inset-0 bg-black/40 backdrop-blur-md" />
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Capacity *
-                </label>
-                <input
-                  type="number"
-                  required
-                  min="1"
-                  value={formData.capacity}
-                  onChange={(e) => setFormData({...formData, capacity: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter maximum capacity"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Number of available spaces for this workspace type
-                </p>
-              </div>
+    {/* Center + scroll layer (no horizontal scroll) */}
+    <div className="absolute inset-0 overflow-y-auto overflow-x-hidden">
+      <div className="min-h-full w-full flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl overflow-x-hidden">
+          <h2 className="text-2xl font-bold mb-4">
+            {editMode ? "Edit Workspace Type" : "Add Workspace Type"}
+          </h2>
 
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
-                  {editMode ? 'Update' : 'Create'}
-                </button>
-              </div>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Workspace Type Name *
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="e.g., Hot Desk, Private Office"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Capacity *
+              </label>
+              <input
+                type="number"
+                required
+                min="1"
+                value={formData.capacity}
+                onChange={(e) =>
+                  setFormData({ ...formData, capacity: e.target.value })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter maximum capacity"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Number of available spaces for this workspace type
+              </p>
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button
+                type="button"
+                onClick={closeModal}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                {editMode ? "Update" : "Create"}
+              </button>
             </div>
           </div>
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

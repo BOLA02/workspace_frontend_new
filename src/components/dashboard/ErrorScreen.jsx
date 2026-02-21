@@ -1,6 +1,6 @@
 export default function ErrorScreen({ error, onRetry }) {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-900">
+    <div className="flex items-center justify-center min-h-screen bg-white">
       <div className="text-center">
         <p className="text-red-500 mb-4">{error}</p>
         <button

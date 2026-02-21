@@ -2,9 +2,9 @@ import { COLORS } from "../../constants/colors"
 
 export default function WorkspaceTypeTable({ data }) {
   return (
-    <div className="bg-slate-800 border border-slate-700 rounded-lg">
-      <div className="p-6 border-b border-slate-700">
-        <h2 className="text-xl font-semibold text-slate-100">
+    <div className="bg-white shadow rounded-lg">
+      <div className="p-6 ">
+        <h2 className="text-xl font-semibold text-black">
           Bookings by Workspace Type
         </h2>
       </div>
@@ -19,11 +19,11 @@ export default function WorkspaceTypeTable({ data }) {
                     className="w-4 h-4 rounded"
                     style={{ backgroundColor: COLORS[index % COLORS.length] }}
                   />
-                  <span className="text-slate-300">{ws.workspaceType}</span>
+                  <span className="text-gray-900">{ws.workspaceType}</span>
                 </div>
                 <div className="text-right">
-                  <div className="text-slate-100 font-semibold">{ws.count}</div>
-                  <div className="text-sm text-slate-400">
+                  <div className="text-gray-100 font-semibold">{ws.count}</div>
+                  <div className="text-sm text-gray-400">
                     ₦{(ws.revenue || 0).toLocaleString("en-NG")}
                   </div>
                 </div>
@@ -31,7 +31,7 @@ export default function WorkspaceTypeTable({ data }) {
             ))}
           </div>
         ) : (
-          <p className="text-slate-400 text-center py-8">No data available</p>
+          <p className="text-gray-400 text-center py-8">No data available</p>
         )}
       </div>
     </div>
