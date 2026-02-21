@@ -5,7 +5,7 @@ import Bookings from './pages/Bookings';
 import WorkspaceTypes from './pages/WorkspaceTypes';
 import Analytics from './pages/Analytics';
 import StaffManagement from './pages/StaffManagement';
-import ProtectedRoute from './components/protectedRoute';
+import ProtectedRoute from './components/ProtectedRoute';
 import AppLayout from './layouts/AppLayout';
 
 function App() {
