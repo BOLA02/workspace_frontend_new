@@ -117,12 +117,7 @@ export default function LoginPage() {
             </button>
           </div>
 
-          {/* Demo Credentials Info */}
-          <div className="mt-6 p-4 bg-slate-700/50 rounded-lg border border-slate-600">
-            <p className="text-xs text-slate-400 font-semibold mb-2">API Configuration:</p>
-            <p className="text-xs text-slate-400">Endpoint: {API_URL}/api/auth/login</p>
-            <p className="text-xs text-slate-300 mt-2">Update API_URL constant to match your backend</p>
-          </div>
+
         </div>
       </div>
     </div>
