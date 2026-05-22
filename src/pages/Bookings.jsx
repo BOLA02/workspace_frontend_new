@@ -154,22 +154,25 @@ export default function BookingsAndExpenses() {
         bookingFormData.durationType
       );
 
-      const response = await fetch(`${API_URL}/api/bookings`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          customerName: bookingFormData.customerName,
-          workspaceTypeId: bookingFormData.workspaceTypeId,
-          amountPaid: parseFloat(bookingFormData.amountPaid),
-          paymentMethod: bookingFormData.paymentMethod,
+   const response = await fetch(`${API_URL}/api/bookings`, {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    customerName: bookingFormData.customerName,
+    phoneNumber: bookingFormData.phoneNumber,
+    workspaceTypeId: bookingFormData.workspaceTypeId,
+    amountPaid: parseFloat(bookingFormData.amountPaid),
+    paymentMethod: bookingFormData.paymentMethod,
+    startDate: bookingFormData.startDate,
+    duration: bookingFormData.duration,
+    durationType: bookingFormData.durationType,
+  }),
+});
 
-          // ✅ backend expects usageDate
-          usageDate: new Date(bookingFormData.startDate).toISOString(),
-        }),
-      });
+
 
       if (response.ok) {
         await response.json();
@@ -529,12 +532,12 @@ export default function BookingsAndExpenses() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                         Workspace
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                         Start Date
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                         End Date
-                      </th>
+                      </th> */}
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                         Duration
                       </th>
@@ -592,7 +595,7 @@ export default function BookingsAndExpenses() {
                           <div className="flex items-center gap-2">
                             <Phone className="w-4 h-4 text-gray-400" />
                             <p className="text-sm text-gray-900">
-                              {booking.phoneNumber || "N/A"}
+                              {booking.customerPhone || "N/A"}
                             </p>
                           </div>
                         </td>
@@ -603,7 +606,7 @@ export default function BookingsAndExpenses() {
                           </p>
                         </td>
 
-                        <td className="px-6 py-4">
+                        {/* <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-gray-400" />
                             <p className="text-sm text-gray-900">
@@ -621,7 +624,7 @@ export default function BookingsAndExpenses() {
                                 : "N/A"}
                             </p>
                           </div>
-                        </td>
+                        </td> */}
 
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
