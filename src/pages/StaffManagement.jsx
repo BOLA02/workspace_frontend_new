@@ -4,12 +4,7 @@ import { UserPlus, Mail, Lock, User, Shield, Info } from "lucide-react";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function StaffManagement() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "STAFF",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", password: "", role: "STAFF" });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
 
@@ -18,7 +13,6 @@ export default function StaffManagement() {
       setMessage({ type: "error", text: "Please fill all required fields" });
       return;
     }
-
     if (formData.password.length < 6) {
       setMessage({ type: "error", text: "Password must be at least 6 characters" });
       return;
@@ -31,26 +25,15 @@ export default function StaffManagement() {
       const token = localStorage.getItem("token");
       const response = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage({
-          type: "success",
-          text: `Staff member ${data.user.name} created successfully!`,
-        });
-        setFormData({
-          name: "",
-          email: "",
-          password: "",
-          role: "STAFF",
-        });
+        setMessage({ type: "success", text: `Staff member ${data.user.name} created successfully!` });
+        setFormData({ name: "", email: "", password: "", role: "STAFF" });
       } else {
         setMessage({ type: "error", text: data.error || "Failed to create staff member" });
       }
@@ -62,199 +45,199 @@ export default function StaffManagement() {
     }
   };
 
+  const inputClass = "w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-100 bg-white text-gray-900 placeholder-gray-300 transition-all";
+  const labelClass = "block text-[10px] uppercase tracking-widest text-gray-400 font-medium mb-1.5";
+
   return (
-    <div className="p-6 lg:p-8 bg-gray-50 min-h-screen">
-      {/* Header */}
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div className="min-h-screen bg-white w-full" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}>
+      <div className="w-full px-6 py-6 space-y-6">
+
+        {/* Header */}
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Staff Management</h1>
-            <p className="text-gray-600 mt-1">Create staff/admin accounts and manage access</p>
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-teal-500" />
+              <span className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-medium">
+                Workspace Registry
+              </span>
+            </div>
+            <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">Staff Management</h1>
+            <p className="text-xs text-gray-400 mt-0.5">Create staff and admin accounts</p>
           </div>
 
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-800 rounded-lg">
-            <Shield className="w-5 h-5" />
-            <span className="font-medium">Admin Only</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 border border-teal-100 bg-teal-50 rounded-md">
+            <Shield className="w-3.5 h-3.5 text-teal-500" />
+            <span className="text-[10px] uppercase tracking-widest text-teal-600 font-medium">Admin Only</span>
           </div>
-        </div>
+        </header>
 
-        {/* Content grid */}
-        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left: Form (bigger) */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 lg:sticky lg:top-6">
-              <div className="flex items-start gap-3 mb-6">
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
-                  <UserPlus className="w-6 h-6 text-blue-600" />
-                </div>
+        {/* Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Register New Staff</h2>
-                  <p className="text-sm text-gray-500">
-                    Create a new staff or admin account securely.
-                  </p>
-                </div>
+          {/* Form — spans 2 cols */}
+          <div className="lg:col-span-2 border border-gray-100 rounded-lg bg-white overflow-hidden">
+
+            {/* Form Header */}
+            <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-100">
+              <div className="w-8 h-8 rounded-md bg-teal-50 flex items-center justify-center">
+                <UserPlus className="w-4 h-4 text-teal-500" />
               </div>
-
-              {message.text && (
-                <div
-                  className={`mb-6 p-4 rounded-xl border ${
-                    message.type === "success"
-                      ? "bg-green-50 text-green-800 border-green-200"
-                      : "bg-red-50 text-red-800 border-red-200"
-                  }`}
-                >
-                  <p className="font-medium">{message.text}</p>
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {/* Name */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    <span className="flex items-center gap-2">
-                      <User className="w-4 h-4" />
-                      Full Name *
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="John Doe"
-                  />
-                </div>
-
-                {/* Email */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    <span className="flex items-center gap-2">
-                      <Mail className="w-4 h-4" />
-                      Email Address *
-                    </span>
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="john@example.com"
-                  />
-                </div>
-
-                {/* Password */}
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    <span className="flex items-center gap-2">
-                      <Lock className="w-4 h-4" />
-                      Password *
-                    </span>
-                  </label>
-                  <input
-                    type="password"
-                    required
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Minimum 6 characters"
-                  />
-                  <p className="mt-1 text-xs text-gray-500">
-                    Password should be at least 6 characters long
-                  </p>
-                </div>
-
-                {/* Role */}
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    <span className="flex items-center gap-2">
-                      <Shield className="w-4 h-4" />
-                      Role *
-                    </span>
-                  </label>
-                  <select
-                    required
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="STAFF">Staff</option>
-                    <option value="ADMIN">Admin</option>
-                  </select>
-                  <p className="mt-1 text-xs text-gray-500">
-                    Staff can create bookings. Admins have full access including user management.
-                  </p>
-                </div>
-
-                {/* Action */}
-                <div className="md:col-span-2 pt-2">
-                  <button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    className={`w-full py-3 px-4 rounded-xl font-medium text-white transition-colors ${
-                      loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-                    }`}
-                  >
-                    {loading ? (
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                        Creating...
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-center gap-2">
-                        <UserPlus className="w-5 h-5" />
-                        Register Staff Member
-                      </div>
-                    )}
-                  </button>
-                </div>
+              <div>
+                <h2 className="text-sm font-semibold text-gray-900">Register New Staff</h2>
+                <p className="text-[10px] text-gray-400 mt-0.5">Create a new staff or admin account securely</p>
               </div>
             </div>
-          </div>
 
-          {/* Right: Notes (always visible on desktop) */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:sticky lg:top-6">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                  <Info className="w-5 h-5 text-blue-600" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900">Important Notes</h3>
+            {/* Message Banner */}
+            {message.text && (
+              <div className={`mx-6 mt-4 px-4 py-3 rounded-md border text-xs font-medium ${
+                message.type === "success"
+                  ? "bg-teal-50 text-teal-700 border-teal-100"
+                  : "bg-red-50 text-red-600 border-red-100"
+              }`}>
+                {message.text}
+              </div>
+            )}
+
+            {/* Form Fields */}
+            <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              <div>
+                <label className={labelClass}>
+                  <span className="flex items-center gap-1.5">
+                    <User className="w-3 h-3" /> Full Name <span className="text-teal-500">*</span>
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="John Doe"
+                  className={inputClass}
+                />
               </div>
 
-              <ul className="space-y-3 text-sm text-gray-700">
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>Staff members can create and view their own bookings.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>Admins can create bookings, manage workspace types, and register new users.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>Email addresses must be unique across all users.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>Passwords are securely hashed before storage.</span>
-                </li>
-              </ul>
+              <div>
+                <label className={labelClass}>
+                  <span className="flex items-center gap-1.5">
+                    <Mail className="w-3 h-3" /> Email Address <span className="text-teal-500">*</span>
+                  </span>
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="john@example.com"
+                  className={inputClass}
+                />
+              </div>
 
-              <div className="mt-5 p-4 rounded-xl bg-blue-50 border border-blue-100">
-                <p className="text-xs text-blue-800">
-                  Tip: Use a strong password for admin accounts and store it securely.
+              <div className="md:col-span-2">
+                <label className={labelClass}>
+                  <span className="flex items-center gap-1.5">
+                    <Lock className="w-3 h-3" /> Password <span className="text-teal-500">*</span>
+                  </span>
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  placeholder="Minimum 6 characters"
+                  className={inputClass}
+                />
+                <p className="text-[10px] text-gray-400 mt-1.5">Password must be at least 6 characters long</p>
+              </div>
+
+              <div className="md:col-span-2">
+                <label className={labelClass}>
+                  <span className="flex items-center gap-1.5">
+                    <Shield className="w-3 h-3" /> Role <span className="text-teal-500">*</span>
+                  </span>
+                </label>
+                <select
+                  required
+                  value={formData.role}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                  className={inputClass + " cursor-pointer appearance-none"}
+                >
+                  <option value="STAFF">Staff</option>
+                  <option value="ADMIN">Admin</option>
+                </select>
+                <p className="text-[10px] text-gray-400 mt-1.5">
+                  Staff can create bookings. Admins have full access including user management.
                 </p>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Optional: Small footer spacing */}
-        <div className="h-6" />
+            {/* Form Footer */}
+            <div className="px-6 py-4 border-t border-gray-100">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={loading}
+                className={`w-full py-2.5 text-xs font-medium rounded-md transition-colors flex items-center justify-center gap-2 ${
+                  loading
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-teal-500 hover:bg-teal-600 active:bg-teal-700 text-white"
+                }`}
+              >
+                {loading ? (
+                  <>
+                    <div className="flex gap-1">
+                      <span className="w-1 h-1 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="w-1 h-1 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <span className="w-1 h-1 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+                    </div>
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="w-3.5 h-3.5" />
+                    Register Staff Member
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Notes Panel */}
+          <div className="lg:col-span-1 border border-gray-100 rounded-lg bg-white overflow-hidden lg:self-start">
+
+            <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-100">
+              <div className="w-8 h-8 rounded-md bg-teal-50 flex items-center justify-center">
+                <Info className="w-4 h-4 text-teal-500" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900">Important Notes</h3>
+                <p className="text-[10px] text-gray-400 mt-0.5">Role permissions & guidelines</p>
+              </div>
+            </div>
+
+            <ul className="px-5 py-4 space-y-3">
+              {[
+                "Staff members can create and view their own bookings.",
+                "Admins can create bookings, manage workspace types, and register new users.",
+                "Email addresses must be unique across all users.",
+                "Passwords are securely hashed before storage.",
+              ].map((note, i) => (
+                <li key={i} className="flex items-start gap-2.5">
+                  <div className="w-1 h-1 rounded-full bg-teal-500 mt-1.5 shrink-0" />
+                  <span className="text-xs text-gray-600 leading-relaxed">{note}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mx-5 mb-5 px-4 py-3 bg-teal-50 border border-teal-100 rounded-md">
+              <p className="text-[10px] text-teal-700 leading-relaxed">
+                Tip: Use a strong password for admin accounts and store it securely.
+              </p>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   );

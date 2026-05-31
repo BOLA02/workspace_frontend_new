@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Briefcase, Plus, Package, Edit2, Trash2, Users, Calendar, AlertCircle } from 'lucide-react';
+import { Briefcase, Plus, Edit2, Trash2, Users, Calendar, AlertCircle } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -33,32 +33,19 @@ export default function WorkspaceTypes() {
   };
 
   const handleSubmit = async () => {
-    if (!formData.name.trim()) {
-      alert('Please enter a workspace type name');
-      return;
-    }
-
-    if (!formData.capacity || formData.capacity < 1) {
-      alert('Please enter a valid capacity (minimum 1)');
-      return;
-    }
+    if (!formData.name.trim()) { alert('Please enter a workspace type name'); return; }
+    if (!formData.capacity || formData.capacity < 1) { alert('Please enter a valid capacity (minimum 1)'); return; }
 
     try {
       const token = localStorage.getItem('token');
-      const url = editMode 
+      const url = editMode
         ? `${API_URL}/api/workspace-types/${selectedWorkspace.id}`
         : `${API_URL}/api/workspace-types`;
-      
+
       const response = await fetch(url, {
         method: editMode ? 'PUT' : 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-          name: formData.name,
-          capacity: parseInt(formData.capacity)
-        })
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: formData.name, capacity: parseInt(formData.capacity) })
       });
 
       if (response.ok) {
@@ -77,26 +64,19 @@ export default function WorkspaceTypes() {
 
   const handleEdit = (workspace) => {
     setSelectedWorkspace(workspace);
-    setFormData({
-      name: workspace.name,
-      capacity: workspace.capacity.toString()
-    });
+    setFormData({ name: workspace.name, capacity: workspace.capacity.toString() });
     setEditMode(true);
     setShowModal(true);
   };
 
   const handleDelete = async (workspace) => {
-    if (!confirm(`Are you sure you want to delete "${workspace.name}"?`)) {
-      return;
-    }
-
+    if (!confirm(`Are you sure you want to delete "${workspace.name}"?`)) return;
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`${API_URL}/api/workspace-types/${workspace.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-
       if (response.ok) {
         alert('Workspace type deleted successfully!');
         fetchWorkspaceTypes();
@@ -119,13 +99,9 @@ export default function WorkspaceTypes() {
       const token = localStorage.getItem('token');
       const response = await fetch(`${API_URL}/api/workspace-types/${workspace.id}`, {
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ isActive: !workspace.isActive })
       });
-
       if (response.ok) {
         alert(`Workspace type ${!workspace.isActive ? 'activated' : 'deactivated'} successfully!`);
         fetchWorkspaceTypes();
@@ -148,228 +124,255 @@ export default function WorkspaceTypes() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="flex items-center justify-center h-screen bg-white">
+        <div className="flex gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-bounce" style={{ animationDelay: "0ms" }} />
+          <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-bounce" style={{ animationDelay: "150ms" }} />
+          <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-bounce" style={{ animationDelay: "300ms" }} />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Workspace Types</h1>
-          <p className="text-gray-600 mt-1">Manage your workspace types and capacity</p>
-        </div>
-        <div className="flex gap-3 w-full sm:w-auto">
-          <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg border border-gray-300">
-            <Calendar className="w-4 h-4 text-gray-600" />
-            <input
-              type="date"
-              value={checkDate}
-              onChange={(e) => setCheckDate(e.target.value)}
-              className="border-none focus:outline-none text-sm"
-            />
-          </div>
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 whitespace-nowrap"
-          >
-            <Plus className="w-5 h-5" />
-            Add Workspace
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-white w-full" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}>
+      <div className="w-full px-6 py-6 space-y-6">
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {workspaceTypes.map((type) => (
-          <div key={type.id} className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow">
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3 flex-1">
-                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                    type.isFullyBooked ? 'bg-red-100' : 'bg-blue-100'
-                  }`}>
-                    <Briefcase className={`w-6 h-6 ${
-                      type.isFullyBooked ? 'text-red-600' : 'text-blue-600'
-                    }`} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-bold text-gray-900 truncate">{type.name}</h3>
-                    <p className="text-xs text-gray-500">ID: {type.id.slice(0, 8)}...</p>
-                  </div>
-                </div>
-                <div className="flex gap-1">
-                  <button
-                    onClick={() => handleEdit(type)}
-                    className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-                    title="Edit"
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(type)}
-                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                    title="Delete"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-gray-600" />
-                    <span className="text-sm font-medium text-gray-700">Capacity</span>
-                  </div>
-                  <span className="text-lg font-bold text-gray-900">{type.capacity}</span>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Booked</span>
-                    <span className="font-semibold text-blue-600">{type.bookedSpaces}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Available</span>
-                    <span className={`font-semibold ${
-                      type.availableSpaces === 0 ? 'text-red-600' : 'text-green-600'
-                    }`}>
-                      {type.availableSpaces}
-                    </span>
-                  </div>
-                  
-                  {/* Progress bar */}
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className={`h-2 rounded-full transition-all ${
-                        type.isFullyBooked ? 'bg-red-600' : 'bg-blue-600'
-                      }`}
-                      style={{ width: `${(type.bookedSpaces / type.capacity) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-
-                {type.isFullyBooked && (
-                  <div className="flex items-center gap-2 p-2 bg-red-50 border border-red-200 rounded-lg">
-                    <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
-                    <span className="text-xs text-red-800 font-medium">Fully Booked</span>
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between pt-3 border-t">
-                  <span className="text-sm text-gray-600">Status</span>
-                  <button
-                    onClick={() => toggleActive(type)}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                      type.isActive 
-                        ? 'bg-green-100 text-green-800 hover:bg-green-200' 
-                        : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                    }`}
-                  >
-                    {type.isActive ? 'Active' : 'Inactive'}
-                  </button>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t mt-4">
-                <p className="text-xs text-gray-500">
-                  Created: {new Date(type.createdAt || Date.now()).toLocaleDateString()}
-                </p>
-              </div>
+        {/* Header */}
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-teal-500" />
+              <span className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-medium">
+                Workspace Registry
+              </span>
             </div>
+            <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">Workspace Types</h1>
+            <p className="text-xs text-gray-400 mt-0.5">Manage workspace types and availability</p>
           </div>
-        ))}
-      </div>
 
-      {workspaceTypes.length === 0 && (
-        <div className="text-center py-12 bg-white rounded-lg shadow">
-          <Briefcase className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500 mb-2">No workspace types found</p>
-          <p className="text-sm text-gray-400 mb-4">Create your first workspace type to get started</p>
-          <button
-            onClick={() => setShowModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            <Plus className="w-4 h-4" />
-            Create Workspace Type
-          </button>
-        </div>
-      )}
-
-     {showModal && (
-  <div className="fixed inset-0 z-50">
-    {/* Blur overlay */}
-    <div className="absolute inset-0 bg-black/40 backdrop-blur-md" />
-
-    {/* Center + scroll layer (no horizontal scroll) */}
-    <div className="absolute inset-0 overflow-y-auto overflow-x-hidden">
-      <div className="min-h-full w-full flex items-center justify-center p-4">
-        <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl overflow-x-hidden">
-          <h2 className="text-2xl font-bold mb-4">
-            {editMode ? "Edit Workspace Type" : "Add Workspace Type"}
-          </h2>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Workspace Type Name *
-              </label>
+          <div className="flex items-center gap-3">
+            {/* Date Picker */}
+            <div className="flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-md bg-white hover:border-teal-300 transition-colors">
+              <Calendar className="w-3.5 h-3.5 text-gray-400" />
               <input
-                type="text"
-                required
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="e.g., Hot Desk, Private Office"
+                type="date"
+                value={checkDate}
+                onChange={(e) => setCheckDate(e.target.value)}
+                className="border-none focus:outline-none text-xs text-gray-700 bg-transparent"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Capacity *
-              </label>
-              <input
-                type="number"
-                required
-                min="1"
-                value={formData.capacity}
-                onChange={(e) =>
-                  setFormData({ ...formData, capacity: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter maximum capacity"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Number of available spaces for this workspace type
-              </p>
+            <button
+              onClick={() => setShowModal(true)}
+              className="flex items-center gap-1.5 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 text-xs font-medium rounded-md transition-colors"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Add Workspace
+            </button>
+          </div>
+        </header>
+
+        {/* Cards Grid */}
+        {workspaceTypes.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {workspaceTypes.map((type) => {
+              const occupancyPct = Math.round((type.bookedSpaces / type.capacity) * 100);
+              return (
+                <div
+                  key={type.id}
+                  className="border border-gray-100 rounded-lg bg-white hover:border-teal-200 transition-colors overflow-hidden"
+                >
+                  {/* Card Header */}
+                  <div className="px-5 pt-5 pb-4 border-b border-gray-50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-9 h-9 rounded-md flex items-center justify-center ${
+                          type.isFullyBooked ? 'bg-red-50' : 'bg-teal-50'
+                        }`}>
+                          <Briefcase className={`w-4 h-4 ${
+                            type.isFullyBooked ? 'text-red-500' : 'text-teal-500'
+                          }`} />
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-semibold text-gray-900 leading-tight">{type.name}</h3>
+                          <p className="text-[10px] text-gray-400 mt-0.5 uppercase tracking-wider">
+                            {type.id.slice(0, 8)}...
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-1">
+                        <button
+                          onClick={() => handleEdit(type)}
+                          className="w-7 h-7 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(type)}
+                          className="w-7 h-7 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Body */}
+                  <div className="px-5 py-4 space-y-4">
+
+                    {/* Capacity row */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Users className="w-3.5 h-3.5 text-gray-400" />
+                        <span className="text-[10px] uppercase tracking-widest text-gray-400">Capacity</span>
+                      </div>
+                      <span className="text-sm font-semibold text-gray-900">{type.capacity}</span>
+                    </div>
+
+                    {/* Occupancy bar */}
+                    <div className="space-y-1.5">
+                      <div className="w-full bg-gray-100 rounded-full h-1.5">
+                        <div
+                          className={`h-1.5 rounded-full transition-all ${
+                            type.isFullyBooked ? 'bg-red-400' : 'bg-teal-500'
+                          }`}
+                          style={{ width: `${occupancyPct}%` }}
+                        />
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[10px] text-gray-400">{type.bookedSpaces} booked</span>
+                        <span className={`text-[10px] font-medium ${
+                          type.availableSpaces === 0 ? 'text-red-500' : 'text-teal-600'
+                        }`}>
+                          {type.availableSpaces} available
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Fully booked alert */}
+                    {type.isFullyBooked && (
+                      <div className="flex items-center gap-2 px-3 py-2 bg-red-50 border border-red-100 rounded-md">
+                        <AlertCircle className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                        <span className="text-[10px] uppercase tracking-wider text-red-500 font-medium">Fully Booked</span>
+                      </div>
+                    )}
+
+                    {/* Status toggle + created */}
+                    <div className="flex items-center justify-between pt-1 border-t border-gray-50">
+                      <p className="text-[10px] text-gray-400">
+                        {new Date(type.createdAt || Date.now()).toLocaleDateString('en-GB', {
+                          day: 'numeric', month: 'short', year: 'numeric'
+                        })}
+                      </p>
+                      <button
+                        onClick={() => toggleActive(type)}
+                        className={`px-2.5 py-1 rounded-full text-[10px] font-medium uppercase tracking-wider transition-colors ${
+                          type.isActive
+                            ? 'bg-teal-50 text-teal-600 hover:bg-teal-100'
+                            : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                        }`}
+                      >
+                        {type.isActive ? 'Active' : 'Inactive'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 border border-dashed border-gray-200 rounded-lg">
+            <div className="w-10 h-10 rounded-md bg-teal-50 flex items-center justify-center mb-3">
+              <Briefcase className="w-5 h-5 text-teal-400" />
+            </div>
+            <p className="text-sm font-medium text-gray-700 mb-1">No workspace types yet</p>
+            <p className="text-xs text-gray-400 mb-4">Create your first workspace type to get started</p>
+            <button
+              onClick={() => setShowModal(true)}
+              className="flex items-center gap-1.5 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 text-xs font-medium rounded-md transition-colors"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Create Workspace Type
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-white border border-gray-100 rounded-lg shadow-xl">
+
+            {/* Modal Header */}
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-teal-500" />
+                <h2 className="text-sm font-semibold text-gray-900 tracking-tight">
+                  {editMode ? 'Edit Workspace Type' : 'Add Workspace Type'}
+                </h2>
+              </div>
+              <button
+                onClick={closeModal}
+                className="w-7 h-7 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors text-lg leading-none"
+              >
+                ×
+              </button>
             </div>
 
-            <div className="flex gap-3 pt-4">
+            {/* Modal Form */}
+            <div className="px-6 py-5 space-y-4">
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-gray-400 font-medium mb-1.5">
+                  Workspace Type Name <span className="text-teal-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="e.g., Hot Desk, Private Office"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-100 bg-white text-gray-900 placeholder-gray-300 transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-gray-400 font-medium mb-1.5">
+                  Capacity <span className="text-teal-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  required
+                  min="1"
+                  value={formData.capacity}
+                  onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
+                  placeholder="Enter maximum capacity"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-100 bg-white text-gray-900 placeholder-gray-300 transition-all"
+                />
+                <p className="text-[10px] text-gray-400 mt-1.5">Number of available spaces for this workspace type</p>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 py-4 border-t border-gray-100 flex gap-3">
               <button
                 type="button"
                 onClick={closeModal}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                className="flex-1 py-2.5 text-xs font-medium border border-gray-200 text-gray-600 rounded-md hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="flex-1 py-2.5 text-xs font-medium bg-teal-500 text-white rounded-md hover:bg-teal-600 active:bg-teal-700 transition-colors"
               >
-                {editMode ? "Update" : "Create"}
+                {editMode ? 'Update' : 'Create'}
               </button>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 }
